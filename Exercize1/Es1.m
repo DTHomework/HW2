@@ -1,6 +1,7 @@
 clear all;
 close all;
 
+%aggiungiamo cose a caso
 filename = 'data.mat';
 importfile(filename);
 
