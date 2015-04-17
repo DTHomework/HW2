@@ -20,7 +20,7 @@ title('Sampled PDP (T_{sample} = Tc)');
 subplot(2, 1, 2);
 stem(tau, PDP_sampled, 'm');
 
-%Here we build a proper white noise
+%Here we build a proper white noise with 0 mean and power = 1
 w_i = wgn(1, 1000, 1, 'complex');
 lin = linspace(0, 0.999, 1000);
 fd = 5*10.^(-3);
