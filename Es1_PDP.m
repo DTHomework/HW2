@@ -7,6 +7,7 @@ PDP_continuous = exp(-tau/tau_rms)./tau_rms;
 figure
 plot(tau, PDP_continuous);
 title('Continuous PDP (T_{sample} = T)');
+
 %I'll now sample the "continuous" PDP
 Tc = (0.25*T);      %New sampling time
 tau = 0:Tc:5;
@@ -23,7 +24,7 @@ title('Sampled PDP (T_{sample} = Tc)');
 K = 3; %K in dB
 K = 10^(K/10); % K in linear
 
-Md = sum(PDP_sampled) 
+Md = sum(PDP_sampled);
 
 C = sqrt(K/(K+1));
 
@@ -31,16 +32,16 @@ norm = Md/( 1 - C^2 ); % MdNorm = 1 - c^2
 
 MdNorm = Md/norm; %PDP normalized
 
-sum( MdNorm )+ C^2 
+sum( MdNorm ) + C^2 
 figure
 stem(tau, PDP_sampled/norm, 'm');
-title('Sampled PDP (T_{sample} = Tc)');
+title('Sampled Normalized PDP (T_{sample} = Tc)');
 
 %filter to create g
 
 %Classical Doppler
 %Here we build a proper white noise
-w_i = wgn(1, 1000, 1, 'complex');
+
 fd = 5*10.^(-3);
 % lin = linspace(0, 0.999, 1000);
 % f = linspace(0, 1, 100001);
@@ -81,11 +82,43 @@ fd = 5*10.^(-3);
 % figure
 % plot( 0 : length(gi)-1, gi );
 % title('gi');
+gtilda = cell(samples, 1);
+giInt = cell(samples, 1);
 
-%cubic interpolator
-gi = hds(w_i);
-x = 0:length(gi)-1;
-xx = 0: 0.25 : length(gi)-1;
-giInt = spline( x, gi, xx);
-figure
-plot(x,gi,'o',xx,giInt)
+for i = 1:samples
+%White noise
+w_i = wgn(1, 1000, 1, 'complex');
+
+%NarrowBand Filter
+gtilda{i} = hds(w_i);
+
+%Cubic Interpolator
+x = 0:length(gtilda{i})-1;
+xx = 0: 0.25 : length(gtilda{i})-1;
+giInt{i} = spline( x, gtilda{i}, xx);
+
+end
+% figure
+% plot(x,gi,'o',xx,giInt)
+
+%Sigma_i
+sigma_i = zeros(samples, 1);
+
+for i = 1:samples
+   sigma_i(i) = sqrt(PDP_sampled(i)/norm); 
+end
+
+%g_i
+g_i = cell(samples, 1);
+
+for i = 1:samples
+    
+    g_i{i} = sigma_i(i) * giInt{i};
+    
+    if i == 1
+        g_i{i} = g_i{i} + C;
+    end
+    figure
+    plot(xx, g_i{i});
+   
+end
