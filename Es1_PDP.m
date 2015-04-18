@@ -17,6 +17,20 @@ figure
 stem(tau, PDP_sampled, 'm');
 title('Sampled PDP (T_{sample} = Tc)');
 
+%Here we build a proper white noise
+w_i = wgn(1, 1000, 1, 'complex');
+lin = linspace(0, 0.999, 1000);
+fd = 5*10.^(-3);
+f = linspace(-fd, fd, 1001);
+sqrt_D = zeros(1, 1001);
+for i = 1:1001
+sqrt_D(i) = sqrt((1/(pi*fd*sqrt(1-(f(i)/fd).^2))).*(abs(f(i)) <= fd));
+end
+figure
+plot(f, 10*log10(sqrt_D));
+title('DOPPLER SPECTRUM (dB), Classical (Jake) model');
+axis([-fd fd 8 15]);
+
 K = 3; %K in dB
 K = 10^(K/10); % K in linear
 
