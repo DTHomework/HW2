@@ -12,4 +12,5 @@ for l = 3 : length( wi ) %saltiamo il transitorio.....
     gi( l ) = -a1*gi( l-1 ) -a2*gi( l-2 ) +c0*( wi( l ) +2*wi( l-1 )+wi( l-2 ) );
 end
 gi = gi( 3 : length( wi ) );
+end
 

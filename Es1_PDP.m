@@ -41,43 +41,51 @@ title('Sampled PDP (T_{sample} = Tc)');
 %Classical Doppler
 %Here we build a proper white noise
 w_i = wgn(1, 1000, 1, 'complex');
-lin = linspace(0, 0.999, 1000);
 fd = 5*10.^(-3);
-f = linspace(0, 1, 100001);
-sqrt_D = zeros(1, 50001);
-for i = 1:50001
-    sqrt_D(i) = sqrt((1/(pi*fd*sqrt(1-(f(i)/fd).^2))).*(abs(f(i)) < fd));%ho messo < invece di <= perche per f=fd la funzione diventa infinito
-end
-for i = 1 : 50000 %whole spectrum of Hds in [0,1]
-    sqrt_D( i + 50001 ) = conj( sqrt_D( 50001 - i ) );
-end
+% lin = linspace(0, 0.999, 1000);
+% f = linspace(0, 1, 100001);
+% sqrt_D = zeros(1, 50001);
+% for i = 1:50001
+%     sqrt_D(i) = sqrt((1/(pi*fd*sqrt(1-(f(i)/fd).^2))).*(abs(f(i)) < fd));%ho messo < invece di <= perche per f=fd la funzione diventa infinito
+% end
+% for i = 1 : 50000 %whole spectrum of Hds in [0,1]
+%     sqrt_D( i + 50001 ) = conj( sqrt_D( 50001 - i ) );
+% end
+% figure
+% plot(f, 10*log10(sqrt_D));
+% title('DOPPLER SPECTRUM (dB), Classical (Jake) model');
+% axis([0 1 8 15]);
+% 
+% 
+% %Chebychev lowpass filter
+% n = 10; %order of cheb low pass filter
+% Rp = 1;%decibels of peak-to-peak passband ripple
+% Wp =  fd;%normalized passband edge frequency
+% [b,a] = cheby1(n,Rp,Wp); %returns the coefficent of the TF
+% Hds2 = freqz(b,a,100001,'whole');
+% figure 
+% plot( 0:0.00001:1, 10*log10( abs(Hds2) ));
+% title('Frequency response of Chebychev filter (dB)');
+% 
+% for i = 1:100001
+%     Hds(i) = sqrt_D(i)*Hds2(i);
+% end
+% 
+% figure 
+% plot( 0:0.00001:1, Hds );%ci sono problemi in dB peche la maggior parte dei valori e' 0
+% title('Frequency response of Hds filter (linear)');
+% 
+% 
+% hds = ifft( sqrt_D );
+% gi = conv(hds,w_i);
+% figure
+% plot( 0 : length(gi)-1, gi );
+% title('gi');
+
+%cubic interpolator
+gi = hds(w_i);
+x = 0:length(gi)-1;
+xx = 0: 0.25 : length(gi)-1;
+giInt = spline( x, gi, xx);
 figure
-plot(f, 10*log10(sqrt_D));
-title('DOPPLER SPECTRUM (dB), Classical (Jake) model');
-axis([0 1 8 15]);
-
-
-%Chebychev lowpass filter
-n = 10; %order of cheb low pass filter
-Rp = 1;%decibels of peak-to-peak passband ripple
-Wp =  fd;%normalized passband edge frequency
-[b,a] = cheby1(n,Rp,Wp); %returns the coefficent of the TF
-Hds2 = freqz(b,a,100001,'whole');
-figure 
-plot( 0:0.00001:1, 10*log10( abs(Hds2) ));
-title('Frequency response of Chebychev filter (dB)');
-
-for i = 1:100001
-    Hds(i) = sqrt_D(i)*Hds2(i);
-end
-
-figure 
-plot( 0:0.00001:1, Hds );%ci sono problemi in dB peche la maggior parte dei valori e' 0
-title('Frequency response of Hds filter (linear)');
-
-
-hds = ifft( Hds );
-gi = conv(hds,w_i);
-figure
-plot( 0 : length(gi)-1, gi );
-title('gi');
+plot(x,gi,'o',xx,giInt)
