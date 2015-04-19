@@ -119,6 +119,8 @@ for i = 1:samples
         g_i{i} = g_i{i} + C;
     end
     figure
-    plot(xx, g_i{i});
-   
+    plot(xx, 10*log10(abs(g_i{i})));
+    title('Absolute value of g_i (dB)');
+    xlabel('tau');
+    ylabel('|g_i| (dB)');
 end
