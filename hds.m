@@ -11,9 +11,21 @@ transient = 201;
 
 %This part and the one Gian wrote (see commented part) are pretty much identical
 a = [1 a1 a2];
-b = [c0 2*c0 c0];
+b = [c0 2*c0 c0];  
+% fvtool(b, a);
+[h, ] = impz(b, a);
+h_energy = sum(h.^2);
+b = b/sqrt(h_energy);     %Normalize the filter to have energy 1
 gi = filter(b, a, wi);
+[H,w] = freqz(b,a,1000000, 'whole');
+% fvtool(b, a);
+figure
+plot(0:999999, 10*log10(abs(H)));
+title('filter freq response');
 gi = gi(transient:length(gi));
+
+
+
 % figure
 % plot(1:length(gi), 10*log10(abs(gi)));
 
