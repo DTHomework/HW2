@@ -34,7 +34,7 @@ MdNorm = Md/norm; %PDP normalized
 
 sum( MdNorm ) + C^2 
 figure
-stem(tau, PDP_sampled/norm, 'm');
+stem(tau, 10*log10(PDP_sampled/norm), 'm');
 title('Sampled Normalized PDP (T_{sample} = Tc)');
 
 %filter to create g
@@ -87,8 +87,7 @@ giInt = cell(samples, 1);
 
 for i = 1:samples
 %White noise
-w_i = wgn(1, 1000, 1, 'complex');
-
+w_i = wgn(1, 1000, 0, 'complex');
 %NarrowBand Filter
 gtilda{i} = hds(w_i);
 
@@ -124,3 +123,5 @@ for i = 1:samples
     xlabel('tau');
     ylabel('|g_i| (dB)');
 end
+
+

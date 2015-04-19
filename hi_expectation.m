@@ -57,7 +57,7 @@ for j = 1:iter
     
     for i = 1:samples
         %White noise
-        w_i = wgn(1, inp_length, 1, 'complex');
+        w_i = wgn(1, inp_length, 0, 'complex');
 
         %NarrowBand Filter
         gtilda{i} = hds(w_i);
