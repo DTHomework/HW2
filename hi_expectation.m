@@ -103,7 +103,7 @@ plot(0:0.25:(0.25*1999), 10*log10(abs(g_i{2}(1, 1:2000))));
 title('Plot of |g1(nTc)| (dB) for n = 0:1999');
 
 %I'll try to plot the histogram
-h1 = g_i{2}(1:1000)/sqrt(exp_vector(2));
+h1 = g_i{2}(1:inp_length)/sqrt(exp_vector(2));
 bin_vector = -2:0.1:2;
 n = hist(h1, bin_vector );
 energy = sum(n.^2);
