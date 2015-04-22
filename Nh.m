@@ -1,18 +1,17 @@
 clear all
 close all
-T = 1;      % Sampling time before interpolation
+T = 4;      % Sampling time before interpolation
 tau_rms = 0.3*T;       
-tau = linspace(0, 5, 1000);
-PDP_continuous = exp(-tau/tau_rms)./tau_rms;
+%tau = linspace(0, 5, 1000);
+%PDP_continuous = exp(-tau/tau_rms)./tau_rms;
 n = 1;
 iterations = 10000;
 
 %I'll now sample the "continuous" PDP
 Tc = (0.25*T);      %New sampling time
-tau = 0:Tc:150;
-samples = 6;
+tau = 0:Tc:600;
+%samples = 6;
 PDP_sampled = exp(-tau/tau_rms)./tau_rms;
-%PDP_sampled = [PDP_sampled(1:samples) zeros(1, length(PDP_sampled )-samples)] ;
 
 
 %normalization of the PDP
@@ -29,11 +28,7 @@ PDPreal = PDP_sampled/norm; %PDP normalized
 a = [];
 
 for e = 0:6
-    Tc = (0.25*T);      %New sampling time
-    tau = 0:Tc:e/4;
-    PDP_sampled = PDPreal( length(tau)+1: length(PDPreal));
-    %PDP_sampled = [PDP_sampled(1:samples) zeros(1, length(PDP_sampled )-samples)] ;
-    
+    PDP_sampled = PDPreal( e+1: length(PDPreal));
     a(e+1) = sum(PDP_sampled);
 
     
