@@ -24,6 +24,7 @@ for i = 1:length(ml)
         b(i) = 1;
     end
 end
+ml = b;
 length(ml);
 sum(b);
 1/mean( b);

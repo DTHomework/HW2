@@ -27,9 +27,9 @@ PDPreal = PDP_sampled/norm; %PDP normalized
 
 a = [];
 
-for e = 0:6
-    PDP_sampled = PDPreal( e+1: length(PDPreal));
-    a(e+1) = sum(PDP_sampled);
+for nh = 1:7
+    PDP_sampled = PDPreal( nh+1: length(PDPreal));
+    a(nh) = sum(PDP_sampled);
 
     
 end

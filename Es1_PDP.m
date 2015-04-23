@@ -54,7 +54,7 @@ gtilda{i} = Hds1(w_i);
 %Cubic Interpolator
 x = 0:length(gtilda{i})-1;
 
-xx = 0: (1/80) : length(gtilda{i})-1;
+xx = 0: (1/80)*Tc : length(gtilda{i})-1;
 
 %         figure
 %     plot(x, (10*log10(abs(gtilda{i}))));
